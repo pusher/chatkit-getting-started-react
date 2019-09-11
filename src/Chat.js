@@ -30,6 +30,7 @@ function Chat(props) {
     messageList.current.scrollTop = messageList.current.scrollHeight;
   });
 
+  // TODO: Show messages from Chatkit
   const messages = [
     {
       id: 0,
@@ -54,6 +55,7 @@ function Chat(props) {
           alt="avatar"
         />
         <div className="Chat__titlebar__details">
+          {/*TODO: Get other user's name from Chatkit */}
           <span>[OTHER USERS NAME HERE]</span>
         </div>
       </div>
