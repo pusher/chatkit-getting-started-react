@@ -8,12 +8,12 @@
   align-items: center;
   justify-content: center;
   margin-top: 6rem;
-  padding: 4rem 2.5rem;
+  padding: 4.3rem;
 }
 
 .Login__title {
   color: #151515;
-  font-size: 1.65rem;
+  font-size: 1.45rem;
   font-weight: lighter;
   text-transform: capitalize;
   margin-top: 0;
