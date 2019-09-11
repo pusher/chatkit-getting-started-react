@@ -22,16 +22,10 @@ function App() {
     <div className="App">
       {userId && otherUserId ? (
         <>
-          <ChatkitProvider
-            instanceLocator="v1:us1:ff9d2a13-c35d-4b75-b791-9a5d05fde329"
-            tokenProvider={tokenProvider}
-            userId={userId}
-          >
-            <div className="App__chatwindow">
-              <UserList />
-              <Chat otherUserId={otherUserId} />
-            </div>
-          </ChatkitProvider>
+          <div className="App__chatwindow">
+            <UserList />
+            <Chat />
+          </div>
         </>
       ) : (
         <Login />

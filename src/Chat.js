@@ -1,6 +1,5 @@
 import Moment from 'react-moment';
 import React, { useState, useEffect } from 'react';
-import { withChatkitOneToOne } from '@pusher/chatkit-client-react';
 
 import './Chat.css';
 import defaultAvatar from './default-avatar.png';
@@ -23,7 +22,7 @@ function Chat(props) {
     if (pendingMessage === '') {
       return;
     }
-    props.chatkit.sendSimpleMessage({ text: pendingMessage });
+    // TODO: Send message to Chatkit
     setPendingMessage('');
   };
 
@@ -31,12 +30,20 @@ function Chat(props) {
     messageList.current.scrollTop = messageList.current.scrollHeight;
   });
 
-  const messages = props.chatkit.messages.map(m => ({
-    id: m.id,
-    isOwnMessage: m.sender.id === props.chatkit.currentUser.id,
-    createdAt: m.createdAt,
-    textContent: m.parts[0].payload.content, // TODO
-  }));
+  const messages = [
+    {
+      id: 0,
+      isOwnMessage: false,
+      createdAt: '01/01/2019',
+      textContent: 'Hi there! This is hardcoded message.',
+    },
+    {
+      id: 1,
+      isOwnMessage: true,
+      createdAt: '01/01/2019',
+      textContent: 'Hey 👋, so is this.',
+    },
+  ];
 
   return (
     <div className="Chat">
@@ -47,11 +54,7 @@ function Chat(props) {
           alt="avatar"
         />
         <div className="Chat__titlebar__details">
-          <span>
-            {props.chatkit.isLoading
-              ? 'Loading...'
-              : props.chatkit.otherUser.name}
-          </span>
+          <span>[OTHER USERS NAME HERE]</span>
         </div>
       </div>
       <div className="Chat__messages" ref={messageList}>
@@ -118,4 +121,4 @@ function Message({ isOwnMessage, isLatestMessage, createdAt, textContent }) {
   );
 }
 
-export default withChatkitOneToOne(Chat);
+export default Chat;
