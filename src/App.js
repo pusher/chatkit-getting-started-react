@@ -1,54 +1,48 @@
-import Chatkit from '@pusher/chatkit-client';
 import React from 'react';
-import { ChatkitProvider } from '@pusher/chatkit-client-react';
+
+import { TokenProvider, ChatkitProvider } from '@pusher/chatkit-client-react';
 
 import './App.css';
 import Chat from './Chat';
-import UseBaseComponent from './UseBaseComponent';
 import UserList from './UserList';
+import Login from './Login';
 import chatkitLogo from './chatkit-logo.svg';
-import instanceConfig from './instance-config';
 
-const tokenProvider = new Chatkit.TokenProvider({
-  url: instanceConfig.tokenProviderUrl,
+const tokenProvider = new TokenProvider({
+  url:
+    'https://us1.pusherplatform.io/services/chatkit_token_provider/v1/ff9d2a13-c35d-4b75-b791-9a5d05fde329/token',
 });
 
 function App() {
   const urlParams = new URLSearchParams(window.location.search);
-  let isUser2 = false;
-  if (urlParams.has('isUser2')) {
-    isUser2 = true;
-  }
-
-  let userId = null;
-  let otherUserId = null;
-  if (isUser2) {
-    userId = instanceConfig.userId2;
-    otherUserId = instanceConfig.userId1;
-  } else {
-    userId = instanceConfig.userId1;
-    otherUserId = instanceConfig.userId2;
-  }
+  const userId = urlParams.get('userId');
+  const otherUserId = urlParams.get('otherUserId');
 
   return (
     <div className="App">
-      <ChatkitProvider
-        instanceLocator={instanceConfig.instanceLocator}
-        tokenProvider={tokenProvider}
-        userId={userId}
-      >
-        <div className="App__chatwindow">
-          <UserList />
-          <Chat otherUserId={otherUserId} />
-        </div>
-        <div className="App__backdrop">
-          <img
-            className="App__backdrop__logo"
-            src={chatkitLogo}
-            alt="Chatkit logo"
-          />
-        </div>
-      </ChatkitProvider>
+      {userId && otherUserId ? (
+        <>
+          <ChatkitProvider
+            instanceLocator="v1:us1:ff9d2a13-c35d-4b75-b791-9a5d05fde329"
+            tokenProvider={tokenProvider}
+            userId={userId}
+          >
+            <div className="App__chatwindow">
+              <UserList />
+              <Chat otherUserId={otherUserId} />
+            </div>
+          </ChatkitProvider>
+        </>
+      ) : (
+        <Login />
+      )}
+      <div className="App__backdrop">
+        <img
+          className="App__backdrop__logo"
+          src={chatkitLogo}
+          alt="Chatkit logo"
+        />
+      </div>
     </div>
   );
 }

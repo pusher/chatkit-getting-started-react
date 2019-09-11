@@ -1,10 +1,9 @@
 import Moment from 'react-moment';
 import React, { useState, useEffect } from 'react';
 import { withChatkitOneToOne } from '@pusher/chatkit-client-react';
+
 import './Chat.css';
 import defaultAvatar from './default-avatar.png';
-
-let interval = null;
 
 function Chat(props) {
   const [pendingMessage, setPendingMessage] = useState('');
@@ -17,7 +16,6 @@ function Chat(props) {
   };
 
   const handleMessageChange = event => {
-    props.chatkit.sendTypingEvent();
     setPendingMessage(event.target.value);
   };
 
@@ -33,53 +31,12 @@ function Chat(props) {
     messageList.current.scrollTop = messageList.current.scrollHeight;
   });
 
-  if (!props.chatkit.isLoading && interval === null) {
-    interval = setInterval(() => {
-      if (document.visibilityState === 'visible') {
-        props.chatkit.setReadCursor();
-      }
-    }, 1000);
-  }
-
-  if (props.chatkit.otherUser) {
-    console.log(props.chatkit.otherUser.presence);
-  }
-  let otherUserStatus = 'Loading...';
-  if (props.chatkit.otherUser && props.chatkit.otherUser.isTyping) {
-    otherUserStatus = 'Typing...';
-  } else if (
-    props.chatkit.otherUser &&
-    props.chatkit.otherUser.presence.state === 'online'
-  ) {
-    otherUserStatus = 'Online';
-  } else if (
-    props.chatkit.otherUser &&
-    props.chatkit.otherUser.presence.state === 'offline'
-  ) {
-    otherUserStatus = 'Offline';
-  }
-
-  let messages = [];
-  if (!props.chatkit.isLoading) {
-    let seenCursorPosition = null;
-    for (let i = props.chatkit.messages.length - 1; i >= 0; i--) {
-      const m = props.chatkit.messages[i];
-      const isFromCurrentUser = m.sender.id === props.chatkit.currentUser.id;
-      const isRead = m.id <= props.chatkit.otherUser.lastReadMessageId;
-      if (isFromCurrentUser && isRead) {
-        seenCursorPosition = m.id;
-        break;
-      }
-    }
-
-    messages = props.chatkit.messages.map(m => ({
-      id: m.id,
-      isOwnMessage: m.sender.id === props.chatkit.currentUser.id,
-      createdAt: m.createdAt,
-      textContent: m.parts[0].payload.content,
-      isLatestMessage: m.id === seenCursorPosition,
-    }));
-  }
+  const messages = props.chatkit.messages.map(m => ({
+    id: m.id,
+    isOwnMessage: m.sender.id === props.chatkit.currentUser.id,
+    createdAt: m.createdAt,
+    textContent: m.parts[0].payload.content, // TODO
+  }));
 
   return (
     <div className="Chat">
@@ -94,9 +51,6 @@ function Chat(props) {
             {props.chatkit.isLoading
               ? 'Loading...'
               : props.chatkit.otherUser.name}
-          </span>
-          <span className="Chat__titlebar__details__presence">
-            {otherUserStatus}
           </span>
         </div>
       </div>
@@ -158,9 +112,6 @@ function Message({ isOwnMessage, isLatestMessage, createdAt, textContent }) {
                 : 'Chat__messages__message__arrow'
             }
           />
-        </div>
-        <div className="Chat__messages__message__seen">
-          {isLatestMessage ? 'seen' : '\u00A0'}
         </div>
       </div>
     </div>

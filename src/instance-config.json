@@ -1,6 +1,0 @@
-{
-  "instanceLocator": "v1:us1:9c676e0d-98a3-4431-8417-bd2b7c6f6e33",
-  "tokenProviderUrl": "https://us1.pusherplatform.io/services/chatkit_token_provider/v1/9c676e0d-98a3-4431-8417-bd2b7c6f6e33/token",
-  "userId1": "alice",
-  "userId2": "bob"
-}
