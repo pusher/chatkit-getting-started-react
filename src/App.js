@@ -16,7 +16,7 @@ function App() {
       {userId && otherUserId ? (
         <>
           <div className="App__chatwindow">
-            <UserList />
+            <UserList userId={userId} />
             <Chat />
           </div>
         </>

@@ -2,7 +2,7 @@ import React from 'react';
 import './UserList.css';
 import defaultAvatar from './default-avatar.png';
 
-function UserList() {
+function UserList({ userId }) {
   return (
     <div className="UserList">
       <div className="UserList__titlebar">
@@ -11,6 +11,7 @@ function UserList() {
           className="UserList__titlebar__avatar"
           alt="avatar"
         />
+        <span className="UserList__titlebar__logged-in-as">{userId}</span>
       </div>
       <div className="UserList__container">
         <ul className="UserList__container__list">
